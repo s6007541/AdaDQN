@@ -8,11 +8,16 @@ This repository was implemented on top of the DQN algorithm introduced by Mnih e
 
 ### Deep Q-Network (DQN)
 
-The Deep Q-Network is a deep reinforcement learning algorithm that extends Q-learning to handle high-dimensional state spaces. It employs a neural network to approximate the Q-function, which represents the expected cumulative future rewards for taking a specific action in a given state. This allows DQN to learn directly from raw sensory inputs, making it applicable to a wide range of tasks.
+The Deep Q-Network (DQN) is a sophisticated reinforcement learning algorithm that adapts Q-learning to manage complex state spaces with high dimensions. By utilizing a neural network, it estimates the Q-function, capturing the anticipated total rewards when making a particular move within a specific state. This neural network approach enables DQN to glean insights directly from unprocessed sensory inputs, expanding its usability across a diverse array of tasks.
 
 ### Atari Games
 
-The Atari 2600, a popular home video game console in the late 1970s and early 1980s, featured a diverse collection of games. These games serve as a benchmark for testing the capabilities of reinforcement learning algorithms. Each game in the Atari 2600 suite provides a unique environment with different challenges, making them an ideal testbed for training agents to generalize across a variety of tasks.
+The Atari 2600, a widely embraced home gaming console during the late 1970s and early 1980s, offered a broad spectrum of games. These games stand as a standard for evaluating the effectiveness of reinforcement learning algorithms. Within the Atari 2600 suite, each game presents a distinct environment, offering varied challenges and serving as an optimal platform for training agents to adapt and excel across a multitude of tasks.
+
+### Covariate Shift
+
+
+We define covariate shift in reinforcement learning as the situation when the distribution of states or observations encountered by an agent during training diverges from those experienced during testing or deployment. This discrepancy can stem from differences between the training and testing environments, where the agent’s learned knowledge might not generalize well to novel or unseen states, leading to suboptimal performance. Moreover, non-stationarity within the environment, such as changes occurring over time, can also cause shifts in state distributions. Handling covariate shift in RL involves strategies to ensure adaptability to varying distributions, including techniques like experience replay to enable learning from diverse data samples, employing algorithms robust to environmental changes, or leveraging transfer learning and domain adaptation methodologies to help the agent adapt to new or evolving states and observations encountered during testing phases, ultimately aiming to enhance the agent’s ability to generalize across different environments and distributions.
 
 ## Table of Contents
 
@@ -84,9 +89,9 @@ The training process involves the following steps:
    - Sample a batch of experiences from the replay buffer and perform a Q-learning update step.
    - Update the target Q-network periodically.
 
-## Evaluation
+## Evaluation under Covariate Shift
 
-The evaluation process involves testing the trained DQN agent on a specific game. The agent's performance is measured in terms of the average score achieved over a specified number of episodes.
+The evaluation process involves testing the trained DQN agent on the environment with covariate shift. There are 15 types of covariate shifts and 5 level of shifts from weak (level 1) to strong (level 5). The agent's performance is measured in terms of the average score achieved over a specified number of episodes.
 
 ## Results
 
