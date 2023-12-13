@@ -22,6 +22,12 @@ The Atari 2600, a widely embraced home gaming console during the late 1970s and 
 
 We define covariate shift in reinforcement learning as the situation when the distribution of states or observations encountered by an agent during training diverges from those experienced during testing or deployment. This discrepancy can stem from differences between the training and testing environments, where the agent’s learned knowledge might not generalize well to novel or unseen states, leading to suboptimal performance. Moreover, non-stationarity within the environment, such as changes occurring over time, can also cause shifts in state distributions. Handling covariate shift in RL involves strategies to ensure adaptability to varying distributions, including techniques like experience replay to enable learning from diverse data samples, employing algorithms robust to environmental changes, or leveraging transfer learning and domain adaptation methodologies to help the agent adapt to new or evolving states and observations encountered during testing phases, ultimately aiming to enhance the agent’s ability to generalize across different environments and distributions.
 
+Here are examples from `MS PacMan` environment with covariate shifts:
+
+![Cov Type](assets/cov_type.png)
+
+![Cov Level](assets/cov_level.png)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -114,6 +120,7 @@ The evaluation process involves testing the trained DQN agent on the environment
 Here's a GIF of the agent playing `MS PacMan`:
 
 ![Agent Playing](assets/pacman.gif)
+
 
 ## Acknowledgment
 This repository inspired by CleanRL
