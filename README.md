@@ -1,6 +1,8 @@
-# Deep Q-Network (DQN) for Atari Games
+# AdaDQN : Adaptive DQN: Enhancing Performance of Deep Q-Networks through Test-Time Adaptation in the Face of Covariate Shift
 
-This repository contains an implementation of the Deep Q-Network (DQN) algorithm for playing Atari games. The DQN algorithm, introduced by Mnih et al. in the paper [Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf), combines Q-learning with deep neural networks to achieve impressive results in a variety of Atari 2600 games.
+Deep Q-Learning (DQN) has achieved remarkable performance in various domains, but its effectiveness is often limited when the distributions of input at training and testing time are misaligned. This phenomenon, known as domain shift or covariate shift, is prevalent in real-world scenarios where unexpected environmental changes and noises result in poor model performance. For instance, in autonomous driving, weather conditions can change rapidly, creating such misalignment. To address this challenge, we proposed Adaptive DQN (AdaDQN), the very first DQN algorithm with test-time adaptation (TTA) to mitigate the performance degradation of DQN during testing in the presence of covariate shift. We evaluate AdaDQN using several environments from the Arcade Learning Environemnt, a framework consisting of Atari 2600 games. We found that standard DQN degrades significantly under covariate shift, while our proposed AdaDQN can recover degraded DQN using only unlabeled test data.
+
+This repository was implemented on top of the DQN algorithm introduced by Mnih et al. in the paper [Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf), combines Q-learning with deep neural networks to achieve impressive results in a variety of Atari 2600 games.
 
 ## Overview
 
@@ -41,7 +43,7 @@ To run this project, you will need the following:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/adhiiisetiawan/atari-dqn.git
+git clone https://github.com/s6007541/AdaDQN.git
 ```
 
 2. Install the required dependencies:
@@ -59,10 +61,10 @@ To train and evaluate the DQN agent, follow the steps outlined below:
 2. Train the DQN agent:
 
 ```bash
-sh train.sh
+sh run_train.sh
 ```
 
-If you want to change the game that you train, please edit the game environment name in `train.sh` file.
+If you want to change the game that you train, please edit the game environment name in `run_train.sh` file.
 
 3. Evaluate the trained agent:
 
@@ -88,22 +90,11 @@ The evaluation process involves testing the trained DQN agent on a specific game
 
 ## Results
 
-### Game: `Q-Bert`
-
-Here's a GIF of the agent playing `Q-Bert`:
-
-![Agent Playing](assets/q_bert.gif)
-
 ### Game: `MS PacMan`
 
 Here's a GIF of the agent playing `MS PacMan`:
 
 ![Agent Playing](assets/pacman.gif)
-
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgment
 This repository inspired by CleanRL
