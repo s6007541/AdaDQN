@@ -57,9 +57,8 @@ def evaluate(
     model = Model(envs,args).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     
-    if args != None:
-        if args.AdaDQN != None:
-            model, optimizer, memory = AdaDQN_init(model)
+    if args.AdaDQN:
+        model, optimizer, memory = AdaDQN_init(model)
         
     model.eval()
 
@@ -121,7 +120,12 @@ if __name__ == "__main__":
     
     pathlib.Path(f'results/{args.game_name}').mkdir(parents=True, exist_ok=True) 
 
-    with open(f'results/{args.game_name}/{args.AdaDQN}_{args.corruption_type}_{args.corruption_level}.txt', 'w') as f:
+    if args.AdaDQN:
+        file_name = f'results/{args.game_name}/AdaDQN_{args.corruption_type}_{args.corruption_level}.txt'
+    else:
+        file_name = f'results/{args.game_name}/DQN_{args.corruption_type}_{args.corruption_level}.txt'
+   
+    with open(file_name, 'w') as f:
         ls = [float(l[0]) for l in final_returns]
         f.write(str(ls) + "\n")
         f.write(str((sum(ls)/len(ls))))

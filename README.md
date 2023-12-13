@@ -73,7 +73,19 @@ If you want to change the game that you train, please edit the game environment 
 
 3. Evaluate the trained agent:
 
-Evaluation process has been done during end of training, but if you want to run evaluation separately, just run `dqn_eval.py` and change the game environment.
+```bash
+sh run_eval.sh
+```
+
+If you want to change the game that you eval, please edit the game environment name in `run_eval.sh` file.
+
+3. Print summary of the results as csv file
+
+```bash
+python csv_create.py
+```
+
+If you want to change the game to print the csv, please edit the game environment name in `csv_create.py` file.
 
 ## Training
 
