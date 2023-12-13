@@ -34,7 +34,6 @@ We define covariate shift in reinforcement learning as the situation when the di
 - [Evaluation](#evaluation)
 - [Results](#results)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Getting Started
 
