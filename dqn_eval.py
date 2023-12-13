@@ -10,23 +10,6 @@ import pathlib
 import os 
 os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3,4,5,6,7"
 
-
-# https://discuss.pytorch.org/t/calculating-the-entropy-loss/14510
-# but there is a bug in the original code: it sums up the entropy over a batch. so I take mean instead of sum
-class HLoss(torch.nn.Module):
-    def __init__(self, temp_factor=1.0):
-        super(HLoss, self).__init__()
-        self.temp_factor = temp_factor
-
-    def forward(self, x):
-        softmax = torch.nn.functional.softmax(x / self.temp_factor, dim=1)
-        entropy = -softmax * torch.log(softmax + 1e-6)
-        b = entropy.mean()
-
-        return b
-
-ClassCriterion = torch.nn.CrossEntropyLoss()
-
 def covirate_shift(x, args):
     if args.corruption_type in CORRUPTION_LIST:
         corruption_func = CORRUPTION_LIST[args.corruption_type]
@@ -35,7 +18,7 @@ def covirate_shift(x, args):
 
     return corruption_func(x, args.corruption_level)
         
-def test_time_adaptation_init(model):
+def AdaDQN_init(model):
     # turn on grad for BN params only
 
     for param in model.parameters():  # initially turn off requires_grad for all
@@ -57,41 +40,6 @@ def test_time_adaptation_init(model):
     memory = []
     return model, optimizer, memory
 
-def test_time_adaptation(model, optimizer, feats, tta):
-    
-    if tta == "bn_stats":
-        pass
-
-    elif tta == "TENT":
-        
-        if len(feats) == 1:
-            model.eval()  # avoid BN error
-        else:
-            model.train()
-            
-        entropy_loss = HLoss()
-
-        preds_of_data = model(feats)
-
-        loss = entropy_loss(preds_of_data)
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-    
-    elif tta == "PL":
-        if len(feats) == 1:
-            model.eval()  # avoid BN error
-        else:
-            model.train()
-        preds_of_data = model(feats)
-        pseudo_cls = preds_of_data.max(1, keepdim=False)[1]
-        loss = ClassCriterion(preds_of_data, pseudo_cls)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        
-    return model, optimizer
 
 def evaluate(
     model_path,
@@ -110,8 +58,8 @@ def evaluate(
     model.load_state_dict(torch.load(model_path, map_location=device))
     
     if args != None:
-        if args.tta != None:
-            model, optimizer, memory = test_time_adaptation_init(model)
+        if args.AdaDQN != None:
+            model, optimizer, memory = AdaDQN_init(model)
         
     model.eval()
 
@@ -121,31 +69,11 @@ def evaluate(
         
         # corruptions
         obs = covirate_shift(obs, args)
-        
-        # if random.random() < epsilon:
-        #     actions = np.array([envs.single_action_space.sample() for _ in range(envs.num_envs)])
-        # else:
-        #     q_values = model(torch.Tensor(obs).to(device))
-        #     actions = torch.argmax(q_values, dim=1).cpu().numpy()
-        
         model.eval()
         obs_tensor = torch.Tensor(obs).to(device)
         q_values = model(obs_tensor)
         actions = torch.argmax(q_values, dim=1).cpu().numpy()
                 
-        if args != None:
-            if args.tta != None:
-                # update memory
-                memory.append(obs_tensor)
-                if(len(memory) > args.tta_batchsize):
-                    memory = memory[-args.tta_batchsize:]
-                    assert(len(memory) == args.tta_batchsize)
-                
-                if len(memory) == args.tta_batchsize:
-                    feats = torch.concat(memory,axis = 0).to(device)
-                    model, optimizer = test_time_adaptation(model, optimizer, feats, args.tta)
-                    memory = []
-        
         next_obs, _, _, _, infos = envs.step(actions)
         if "final_info" in infos:
             for info in infos["final_info"]:
@@ -159,43 +87,41 @@ def evaluate(
 
 
 if __name__ == "__main__":
-    # from huggingface_hub import hf_hub_download
-
-    # import debugpy
-    # debugpy.listen(5679)
-    # print("wait for debugger")
-    # debugpy.wait_for_client()
-    # print("attach")
         
-    from dqn_atari import QNetwork, make_env
+    from dqn_atari import make_env
+    from Q_model import QNetwork
     
     parser = argparse.ArgumentParser()
     
     parser.add_argument('--checkpoint_path', type=str, default='runs/ALE/AirRaid-v5__AirRaid-v5_5M_BN__1__1699933828/AirRaid-v5_5M_BN.pth', help='path to .pth file')
     parser.add_argument('--game_name', type=str, default='ALE/AirRaid-v5', help='name of atari game')   
-    parser.add_argument('--tta', type=str, default=None, help='bn_stats or TENT')   
+    parser.add_argument('--AdaDQN', action='store_true', default=True, help="activate AdaDQN algorithm")   
     parser.add_argument('--eval_eps',default=10, type=int, help='number of eps')
-    parser.add_argument('--tta_batchsize',default=64, type=int, help='batchsize of tta')
     parser.add_argument('--corruption_type', type=str, default='none', help='type of corruption')
     parser.add_argument('--corruption_level',default=1, type=int, help='level of severity of corruption')
-    parser.add_argument('--device_id', default = 1, type = int)
-    parser.add_argument('--network_depth', default = 0, type = int)
-
+    parser.add_argument('--device_id', default = 1, type = int, help='gpu device id')
+    parser.add_argument('--network_depth', default = 0, type = int, help='depth of QNetwork, must be similar to training process')
+    parser.add_argument("--debug", action='store_true', default=True, help="debug mode")
+    
     args = parser.parse_args()
+    if args.debug:
+        import debugpy
+        debugpy.listen(5679)
+        print("wait for debugger")
+        debugpy.wait_for_client()
+        print("attach")
+        
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print('device :', device)
     torch.cuda.set_device(args.device_id)
-    # device = torch.device("cpu")
 
-
-    # model_path = hf_hub_download(repo_id="cleanrl/CartPole-v1-dqn-seed1", filename="dqn.cleanrl_model")
     model_path = args.checkpoint_path
     final_returns = evaluate(model_path, make_env, args.game_name, eval_episode=args.eval_eps, run_name=f"eval", Model=QNetwork, device=device, capture_video=False, args=args)    
     print("average returns :", sum(final_returns)/len(final_returns))
     
     pathlib.Path(f'results/{args.game_name}').mkdir(parents=True, exist_ok=True) 
 
-    with open(f'results/{args.game_name}/{args.tta}_{args.corruption_type}_{args.corruption_level}.txt', 'w') as f:
+    with open(f'results/{args.game_name}/{args.AdaDQN}_{args.corruption_type}_{args.corruption_level}.txt', 'w') as f:
         ls = [float(l[0]) for l in final_returns]
         f.write(str(ls) + "\n")
         f.write(str((sum(ls)/len(ls))))

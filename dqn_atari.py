@@ -3,6 +3,7 @@ import os
 import random
 import time
 from distutils.util import strtobool
+from Q_model import QNetwork
 
 import gymnasium as gym
 import numpy as np
@@ -22,7 +23,6 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 def parse_args():
-    # fmt: off
     parser = argparse.ArgumentParser()
     parser.add_argument("--exp-name", type=str, default=os.path.basename(__file__).rstrip(".py"),
         help="the name of this experiment")
@@ -77,8 +77,10 @@ def parse_args():
     parser.add_argument("--train-frequency", type=int, default=4,
         help="the frequency of training")
     
-    parser.add_argument("--network_depth", type=int, default=0,
-        help="the frequency of training")
+    parser.add_argument("--network_depth", type=int, default=0, 
+                        help="the frequency of training")
+    parser.add_argument("--debug", action='store_true', default=True, 
+                        help="debug mode")
     
     args = parser.parse_args()
     # fmt: on
@@ -112,91 +114,6 @@ def make_env(env_id, seed, idx, capture_video, run_name):
         return env
     
     return thunk
-
-
-class QNetwork(nn.Module):
-    def __init__(self, env, args=None):
-        super().__init__()
-        if args != None:
-            if args.network_depth == 0: # original
-                self.network = nn.Sequential(
-                    nn.Conv2d(4, 32, 8, stride=4),
-                    nn.BatchNorm2d(32),
-                    nn.ReLU(),
-                    nn.Conv2d(32, 64, 4, stride=2),
-                    nn.BatchNorm2d(64),
-                    nn.ReLU(),
-                    nn.Conv2d(64, 64, 3, stride=1),
-                    nn.BatchNorm2d(64),
-                    nn.ReLU(),
-                    nn.Flatten(),
-                    nn.Linear(3136, 512),
-                    nn.ReLU(),
-                    nn.Linear(512, env.single_action_space.n),
-                )
-            elif args.network_depth == 1: # deeper
-                self.network = nn.Sequential(
-                    nn.Conv2d(4, 32, 8, stride=4),
-                    nn.BatchNorm2d(32),
-                    nn.ReLU(),
-                    nn.Conv2d(32, 64, 4, stride=2),
-                    nn.BatchNorm2d(64),
-                    nn.ReLU(),
-                    nn.Conv2d(64, 128, 3, stride=1),
-                    nn.BatchNorm2d(128),
-                    nn.ReLU(),
-                    nn.Conv2d(128, 128, 3, stride=1),
-                    nn.BatchNorm2d(128),
-                    nn.ReLU(),
-                    nn.Flatten(),
-                    nn.Linear(3200, 512),
-                    nn.ReLU(),
-                    nn.Linear(512, env.single_action_space.n),
-                )
-                
-            elif args.network_depth == 2: # deepest
-                self.network = nn.Sequential(
-                    nn.Conv2d(4, 32, 8, stride=4),
-                    nn.BatchNorm2d(32),
-                    nn.ReLU(),
-                    nn.Conv2d(32, 64, 4, stride=2),
-                    nn.BatchNorm2d(64),
-                    nn.ReLU(),
-                    nn.Conv2d(64, 128, 3, stride=1),
-                    nn.BatchNorm2d(128),
-                    nn.ReLU(),
-                    nn.Conv2d(128, 256, 3, stride=1),
-                    nn.BatchNorm2d(256),
-                    nn.ReLU(),
-                    nn.Conv2d(256, 256, 3, stride=1),
-                    nn.BatchNorm2d(256),
-                    nn.ReLU(),
-                    nn.Flatten(),
-                    nn.Linear(2304, 512),
-                    nn.ReLU(),
-                    nn.Linear(512, env.single_action_space.n),
-                )
-            else:
-                raise NotImplementedError   
-        else:
-            self.network = nn.Sequential(
-                nn.Conv2d(4, 32, 8, stride=4),
-                nn.BatchNorm2d(32),
-                nn.ReLU(),
-                nn.Conv2d(32, 64, 4, stride=2),
-                nn.BatchNorm2d(64),
-                nn.ReLU(),
-                nn.Conv2d(64, 64, 3, stride=1),
-                nn.BatchNorm2d(64),
-                nn.ReLU(),
-                nn.Flatten(),
-                nn.Linear(3136, 512),
-                nn.ReLU(),
-                nn.Linear(512, env.single_action_space.n),
-            )
-
-    def forward(self, x):
-        return self.network(x / 255.0)
     
 
 def linear_schedule(start_e: float, end_e: float, duration: int, t: int):
@@ -215,6 +132,14 @@ if __name__ == "__main__":
     
     args = parse_args()
     run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+
+    if args.debug:
+        import debugpy
+        debugpy.listen(5679)
+        print("wait for debugger")
+        debugpy.wait_for_client()
+        print("attach")
+        
     if args.track:
         import wandb
 

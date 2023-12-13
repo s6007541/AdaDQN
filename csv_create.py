@@ -13,7 +13,7 @@ for game in games:
         for tta in ttas:
             tta_ls = []
             for corr in corruptions: 
-                path = f"/mnt/sting/sorn111930/atari/atari-dqn/results/ALE/{game}-v5/{tta}_{corr}_{corr_level}.txt"
+                path = f"results/ALE/{game}-v5/{tta}_{corr}_{corr_level}.txt"
                 with open(path) as f:
                     lines = f.readlines()
                 
