@@ -1,5 +1,8 @@
 # AdaDQN : Adaptive DQN: Enhancing Performance of Deep Q-Networks through Test-Time Adaptation in the Face of Covariate Shift
+[[`Slides`](https://docs.google.com/presentation/d/1V0aSEbBalg8lnKeg6NVcS9FPs3CAw2xy/edit?usp=sharing&ouid=104359145724275927049&rtpof=true&sd=true)]
+[[`Paper`](https://github.com/s6007541/Progressive-Self-Knowledge-Distillation-with-Mutual-Learning/blob/main/pdf_files/PDKD_ML.pdf)] 
 
+## Abstract
 Deep Q-Learning (DQN) has achieved remarkable performance in various domains, but its effectiveness is often limited when the distributions of input at training and testing time are misaligned. This phenomenon, known as domain shift or covariate shift, is prevalent in real-world scenarios where unexpected environmental changes and noises result in poor model performance. For instance, in autonomous driving, weather conditions can change rapidly, creating such misalignment. To address this challenge, we proposed Adaptive DQN (AdaDQN), the very first DQN algorithm with test-time adaptation (TTA) to mitigate the performance degradation of DQN during testing in the presence of covariate shift. We evaluate AdaDQN using several environments from the Arcade Learning Environemnt, a framework consisting of Atari 2600 games. We found that standard DQN degrades significantly under covariate shift, while our proposed AdaDQN can recover degraded DQN using only unlabeled test data.
 
 This repository was implemented on top of the DQN algorithm introduced by Mnih et al. in the paper [Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf), combines Q-learning with deep neural networks to achieve impressive results in a variety of Atari 2600 games.
