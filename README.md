@@ -25,7 +25,6 @@ We define covariate shift in reinforcement learning as the situation when the di
 Here are examples from `MS PacMan` environment with covariate shifts:
 
 ![Cov Type](assets/cov_type.png)
-
 ![Cov Level](assets/cov_level.png)
 
 ## Table of Contents
