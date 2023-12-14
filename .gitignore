@@ -199,3 +199,5 @@ wandb/
 *.txt
 *.jpg
 *.csv
+old_runs/*
+old_videos/*
