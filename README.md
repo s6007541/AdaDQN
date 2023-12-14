@@ -58,7 +58,19 @@ To run this project, you will need the following:
 git clone https://github.com/s6007541/AdaDQN.git
 ```
 
-2. Install the required dependencies:
+2. Create conda environment
+
+```bash
+conda create --name adadqn python=3.9
+```
+
+3. Activate environment
+
+```bash
+conda activate adadqn
+```
+
+4. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
