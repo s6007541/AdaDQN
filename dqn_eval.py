@@ -94,7 +94,7 @@ if __name__ == "__main__":
     
     parser.add_argument('--checkpoint_path', type=str, default='runs/ALE/AirRaid-v5__AirRaid-v5_5M_BN__1__1699933828/AirRaid-v5_5M_BN.pth', help='path to .pth file')
     parser.add_argument('--game_name', type=str, default='ALE/AirRaid-v5', help='name of atari game')   
-    parser.add_argument('--AdaDQN', action='store_true', default=True, help="activate AdaDQN algorithm")   
+    parser.add_argument('--AdaDQN', action='store_true', default=False, help="activate AdaDQN algorithm")   
     parser.add_argument('--eval_eps',default=10, type=int, help='number of eps')
     parser.add_argument('--corruption_type', type=str, default='none', help='type of corruption')
     parser.add_argument('--corruption_level',default=1, type=int, help='level of severity of corruption')
