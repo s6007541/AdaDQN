@@ -100,7 +100,7 @@ if __name__ == "__main__":
     parser.add_argument('--corruption_level',default=1, type=int, help='level of severity of corruption')
     parser.add_argument('--device_id', default = 1, type = int, help='gpu device id')
     parser.add_argument('--network_depth', default = 0, type = int, help='depth of QNetwork, must be similar to training process')
-    parser.add_argument("--debug", action='store_true', default=True, help="debug mode")
+    parser.add_argument("--debug", action='store_true', default=False, help="debug mode")
     
     args = parser.parse_args()
     if args.debug:

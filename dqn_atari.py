@@ -79,7 +79,7 @@ def parse_args():
     
     parser.add_argument("--network_depth", type=int, default=0, 
                         help="the frequency of training")
-    parser.add_argument("--debug", action='store_true', default=True, 
+    parser.add_argument("--debug", action='store_true', default=False, 
                         help="debug mode")
     
     args = parser.parse_args()
