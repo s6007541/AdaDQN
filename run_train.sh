@@ -7,6 +7,6 @@ for GAME in "${GAMES[@]}"; do
             --total-timesteps 10000 \
             --buffer-size 400000 \
             --save-model \
-            --network_depth 2\
+            --network_depth 2
 done
 
