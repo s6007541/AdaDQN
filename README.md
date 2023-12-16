@@ -24,8 +24,8 @@ We define covariate shift in reinforcement learning as the situation when the di
 
 Here are examples from `MS PacMan` environment with covariate shifts:
 
-![Cov Type](assets/cov_type.png)
-![Cov Level](assets/cov_level.png)
+<!-- ![Cov Type](assets/cov_type.png)
+![Cov Level](assets/cov_level.png) -->
 
 ## Table of Contents
 
@@ -124,13 +124,13 @@ The training process involves the following steps:
 
 The evaluation process involves testing the trained DQN agent on the environment with covariate shift. There are 15 types of covariate shifts and 5 level of shifts from weak (level 1) to strong (level 5). The agent's performance is measured in terms of the average score achieved over a specified number of episodes.
 
-## Results
+<!-- ## Results -->
 
-### Game: `MS PacMan`
+<!-- ### Game: `MS PacMan` -->
 
-Here's a GIF of the agent playing `MS PacMan`:
+<!-- Here's a GIF of the agent playing `MS PacMan`:
 
-![Agent Playing](assets/pacman.gif)
+![Agent Playing](assets/pacman.gif) -->
 
 
 ## Acknowledgment
