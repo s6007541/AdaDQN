@@ -11,7 +11,7 @@ Deep Q-Learning (DQN) has achieved remarkable performance in various domains, bu
 This repository was implemented on top of the DQN algorithm introduced by Mnih et al. in the paper [Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf), combines Q-learning with deep neural networks to achieve impressive results in a variety of Atari 2600 games.
 
 <p align="center">
-<img src="image/covariate_shift.png" height=350>
+<img src="image/covariate_shift.png" height=450>
 </p>
 
 ## Overview
