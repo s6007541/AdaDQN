@@ -1,5 +1,5 @@
 # AdaDQN : Adaptive DQN: Enhancing Performance of Deep Q-Networks through Test-Time Adaptation in the Face of Covariate Shift
-[[`Slides`](https://docs.google.com/presentation/d/1QPD_oB8fpxoR_DN_qp9bD6wKi6mIfVRLn5bZUcjmzjE/edit?usp=sharing)]
+[[`Slides`]([https://docs.google.com/presentation/d/1QPD_oB8fpxoR_DN_qp9bD6wKi6mIfVRLn5bZUcjmzjE/edit?usp=sharing](https://docs.google.com/presentation/d/1SYrwaG1NZG6Y9XAi7taLR1qRVkXYm1_9JMq0fs7TaeQ/edit?usp=sharing))]
 [[`Paper`](https://github.com/s6007541/AdaDQN/blob/main/pdf_files/AdaDQN.pdf)] 
 
 > Contributors: Sorn Chottananurak, Adriana Staudova, Junhee Lee
